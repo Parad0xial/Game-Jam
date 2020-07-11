@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     private float moveInput;
     private bool hasMoved;
     private bool isGoingLeft;
+    public float topSpeed;
+    public float deathHeight;
 
     public Rigidbody2D rb;
 
@@ -46,11 +48,11 @@ public class PlayerController : MonoBehaviour
      rb.velocity = new Vector2(-speed, rb.velocity.y);
 	}
      
-     if(speed < 50 && hasMoved == true){
+     if(speed < topSpeed && hasMoved == true){
       speed = speed + speedIncrease;
 	 }
 
-     if(rb.position.y < -50){
+     if(rb.position.y < deathHeight){
          SceneManager.LoadScene(SceneManager.GetActiveScene().name);
      }
      
