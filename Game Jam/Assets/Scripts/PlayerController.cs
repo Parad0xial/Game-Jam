@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public float speed;
     public float jumpForce;
     private float moveInput;
+    private bool hasMoved;
 
     public Rigidbody2D rb;
 
@@ -19,6 +20,9 @@ public class PlayerController : MonoBehaviour
     void Update(){
      moveInput = Input.GetAxisRaw("Horizontal");
 
+     if (moveInput > 0){
+      hasMoved = true;
+	 }
 
     if (Input.GetKey(KeyCode.D))
          {
@@ -35,9 +39,10 @@ public class PlayerController : MonoBehaviour
              rb.velocity = new Vector2(rb.velocity.x, jumpForce);
          }
      
-     if(moveInput != 0 && speed < 50){
+     if(speed < 50 && hasMoved == true){
       speed = speed + speedIncrease;
 	 }
+
      if(rb.position.y < -50){
          SceneManager.LoadScene(SceneManager.GetActiveScene().name);
      }
