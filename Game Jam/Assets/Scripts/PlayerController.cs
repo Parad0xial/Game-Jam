@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public float jumpForce;
     private float moveInput;
     private bool hasMoved;
+    private bool isGoingLeft;
 
     public Rigidbody2D rb;
 
@@ -26,18 +27,24 @@ public class PlayerController : MonoBehaviour
 
     if (Input.GetKey(KeyCode.D))
          {
-             rb.velocity = new Vector2(speed, rb.velocity.y);
+             isGoingLeft = false;
          }
  
     if (Input.GetKey(KeyCode.A))
          {
-             rb.velocity = new Vector2(-speed, rb.velocity.y);
+             isGoingLeft = true;
          }
     
     if (Input.GetKeyDown("space"))
          {
              rb.velocity = new Vector2(rb.velocity.x, jumpForce);
          }
+
+    if (isGoingLeft == false){
+     rb.velocity = new Vector2(speed, rb.velocity.y);
+    } else {
+     rb.velocity = new Vector2(-speed, rb.velocity.y);
+	}
      
      if(speed < 50 && hasMoved == true){
       speed = speed + speedIncrease;
