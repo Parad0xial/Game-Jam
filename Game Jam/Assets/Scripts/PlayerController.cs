@@ -14,10 +14,13 @@ public class PlayerController : MonoBehaviour
     public float topSpeed;
     public float deathHeight;
 
+    private ScreenShake shake;
+
     public Rigidbody2D rb;
 
     void start(){
      rb = GetComponent<Rigidbody2D>(); 
+     shake = GameObject.FindGameObjectWithTag("ScreenShake").GetComponent<ScreenShake>();
 	}
 
     void Update(){
@@ -40,6 +43,7 @@ public class PlayerController : MonoBehaviour
     if (Input.GetKeyDown("space"))
          {
              rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+             shake.CamShake();
          }
 
     if (isGoingLeft == false){
