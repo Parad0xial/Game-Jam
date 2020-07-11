@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
              rb.velocity = new Vector2(rb.velocity.x, jumpForce);
          }
      
-     if(moveInput != 0){
+     if(moveInput != 0 && speed < 50){
       speed = speed + speedIncrease;
 	 }
      
