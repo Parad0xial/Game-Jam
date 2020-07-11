@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
     if (Input.GetKeyDown("space"))
          {
              rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-             shake.CamShake();
+             //shake.CamShake();
          }
 
     if (isGoingLeft == false){
