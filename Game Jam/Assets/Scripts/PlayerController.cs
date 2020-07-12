@@ -18,21 +18,22 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
     private Timer timer;
     private bool dead = false;
-    private ScreenShake shake;
-
+    //private ScreenShake shake;
     public Rigidbody2D rb;
+    private bool IsGrounded = true;
+    private bool canDoubleJump;
 
     void start(){
-        rb = GetComponent<Rigidbody2D>(); 
-        shake = GameObject.FindGameObjectWithTag("ScreenShake").GetComponent<ScreenShake>();
+        rb = GetComponent<Rigidbody2D>();
+        //shake = GameObject.FindGameObjectWithTag("ScreenShake").GetComponent<ScreenShake>();
 	}
 
     void Update(){
 
         if (dead)
         {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-dead = false;            
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            dead = false;            
         }
         moveInput = Input.GetAxisRaw("Horizontal");
 
@@ -50,21 +51,36 @@ dead = false;
                 isGoingLeft = true;
             }
         
+        if(IsGrounded)
+        {
+            canDoubleJump = true;
+        }
         if (Input.GetKeyDown("space"))
             {
-                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-                //shake.CamShake();
+                if(IsGrounded){
+                    rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                    //shake.CamShake();
+                }
+                else{
+                    if(canDoubleJump){
+                         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                         canDoubleJump = false;
+                    } 
+                }
             }
 
         if (isGoingLeft == false && hasMoved == true){
-        rb.velocity = new Vector2(speed, rb.velocity.y);
-        } else if(hasMoved == true) {
-        rb.velocity = new Vector2(-speed, rb.velocity.y);
+            rb.velocity = new Vector2(speed, rb.velocity.y);
+        } 
+
+        else if(hasMoved == true) {
+          rb.velocity = new Vector2(-speed, rb.velocity.y);
         }
         
         if(speed < topSpeed && hasMoved == true){
-        speed = speed + speedIncrease;
+            speed = speed + speedIncrease;
         }
+
          if(rb.position.y < deathHeight){
             animator.SetBool("IsDead", true);
             timer = new Timer (new TimerCallback(TimerProc));
@@ -79,4 +95,21 @@ dead = false;
         t.Dispose();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    void OnCollisionEnter2D(Collision2D theCollision)
+    {
+        if (theCollision.gameObject.name == "floor")
+        {
+            IsGrounded = true;
+        }
+    }
+
+    void OnCollisionExit2D(Collision2D theCollision)
+    {
+        if (theCollision.gameObject.name == "floor")
+        {
+            IsGrounded = false;
+        }
+    }
+
 }
