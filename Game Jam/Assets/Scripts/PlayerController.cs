@@ -56,9 +56,9 @@ dead = false;
                 //shake.CamShake();
             }
 
-        if (isGoingLeft == false){
+        if (isGoingLeft == false && hasMoved == true){
         rb.velocity = new Vector2(speed, rb.velocity.y);
-        } else {
+        } else if(hasMoved == true) {
         rb.velocity = new Vector2(-speed, rb.velocity.y);
         }
         
