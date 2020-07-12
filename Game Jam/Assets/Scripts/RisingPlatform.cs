@@ -4,13 +4,30 @@ using UnityEngine;
 public class RisingPlatform : MonoBehaviour
 {
 
-    public Rigidbody2D rb;
-    public float risingspeed;
+    public Vector3 velocity; 
+    private bool moving = false;
+    public bool moveWithPlatform = false;
 
     void OnCollisionEnter2D(Collision2D col){
         if(col.collider.tag == "Player"){
-          rb.velocity = new Vector2(risingspeed, rb.velocity.x);
+          moving = true;
+        if(moveWithPlatform){
+            col.collider.transform.SetParent(transform);
+            }
           }
         }
+    void OnCollisionExit2D(Collision2D col){
+        if(col.collider.tag == "Player"){
+          moving = false;
+          if(moveWithPlatform){
+            col.collider.transform.SetParent(transform);
+            }
+          }
+        }
+    void FixedUpdate(){
+        if(moving){
+            transform.position += (velocity * Time.deltaTime);
+        }
+    }
 
 }

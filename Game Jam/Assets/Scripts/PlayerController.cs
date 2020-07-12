@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Threading;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,52 +14,69 @@ public class PlayerController : MonoBehaviour
     private bool isGoingLeft;
     public float topSpeed;
     public float deathHeight;
-
+    public PlayerCollision pCollision;
+    public Animator animator;
+    private Timer timer;
+    private bool dead = false;
     private ScreenShake shake;
 
     public Rigidbody2D rb;
 
     void start(){
-     rb = GetComponent<Rigidbody2D>(); 
-     shake = GameObject.FindGameObjectWithTag("ScreenShake").GetComponent<ScreenShake>();
+        rb = GetComponent<Rigidbody2D>(); 
+        shake = GameObject.FindGameObjectWithTag("ScreenShake").GetComponent<ScreenShake>();
 	}
 
     void Update(){
-     moveInput = Input.GetAxisRaw("Horizontal");
 
-     if (moveInput > 0){
-      hasMoved = true;
-	 }
+        if (dead)
+        {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+dead = false;            
+        }
+        moveInput = Input.GetAxisRaw("Horizontal");
 
-    if (Input.GetKey(KeyCode.D))
-         {
-             isGoingLeft = false;
-         }
- 
-    if (Input.GetKey(KeyCode.A))
-         {
-             isGoingLeft = true;
-         }
+        if (moveInput > 0){
+        hasMoved = true;
+        }
+
+        if (Input.GetKey(KeyCode.D))
+            {
+                isGoingLeft = false;
+            }
     
-    if (Input.GetKeyDown("space"))
-         {
-             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-             shake.CamShake();
-         }
+        if (Input.GetKey(KeyCode.A))
+            {
+                isGoingLeft = true;
+            }
+        
+        if (Input.GetKeyDown("space"))
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                //shake.CamShake();
+            }
 
-    if (isGoingLeft == false){
-     rb.velocity = new Vector2(speed, rb.velocity.y);
-    } else {
-     rb.velocity = new Vector2(-speed, rb.velocity.y);
+        if (isGoingLeft == false){
+        rb.velocity = new Vector2(speed, rb.velocity.y);
+        } else {
+        rb.velocity = new Vector2(-speed, rb.velocity.y);
+        }
+        
+        if(speed < topSpeed && hasMoved == true){
+        speed = speed + speedIncrease;
+        }
+         if(rb.position.y < deathHeight){
+            animator.SetBool("IsDead", true);
+            timer = new Timer (new TimerCallback(TimerProc));
+            timer.Change(1000,0);
+            
+        }
 	}
-     
-     if(speed < topSpeed && hasMoved == true){
-      speed = speed + speedIncrease;
-	 }
-
-     if(rb.position.y < deathHeight){
-         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-     }
-     
-	}
+    private void TimerProc(object state)
+    {
+        dead = true;
+        Timer t = (Timer) state;
+        t.Dispose();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 }
