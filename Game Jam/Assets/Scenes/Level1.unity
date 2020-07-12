@@ -5007,6 +5007,8 @@ MonoBehaviour:
   jumpForce: 20
   topSpeed: 100
   deathHeight: -50
+  pCollision: {fileID: 1506770054}
+  animator: {fileID: 1506770055}
   rb: {fileID: 1506770052}
 --- !u!114 &1506770054
 MonoBehaviour:
@@ -5022,6 +5024,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 1506770055}
   movement: {fileID: 1506770053}
+  IsFalling: 0
 --- !u!95 &1506770055
 Animator:
   serializedVersion: 3
