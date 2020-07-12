@@ -8,6 +8,7 @@ public class PlayerCollision : MonoBehaviour
     public Animator animator;
     private Collision2D col;
     public PlayerController movement;
+    public bool IsFalling = false;
 
     void Start()
     {
@@ -17,8 +18,10 @@ public class PlayerCollision : MonoBehaviour
     public IEnumerator OnCollisionEnter2D(Collision2D col){
         if(col.collider.tag == "Obstacle"){
             animator.SetBool("IsDead", true);
-            yield return new WaitForSeconds(.44f);
+            yield return new WaitForSeconds(1f);
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
+     
+     
 }
